@@ -8,9 +8,8 @@ echo "employee present"
 else
 echo "employee absent"
 fi
-#!/bin/bash -x
 
-#WELCOME TO EMPLOYEE WAGE COMPUTATION PROGRAM
+
 
 
 WAGE_PER_HR=20
@@ -221,3 +220,53 @@ echo "Total Working employee hr in a month is $totalWorkingHr"
 echo "Total Salary is $totalSalary"
 echo "Daily Wage is ${dailyWage[@]} "
 
+
+
+WAGE_PER_HR=20
+ISFULLTIME=1
+ISPARTTIME=2
+WORKINGDAYS=20
+WORK_HR_IN_MONTH=100
+
+
+totalEmpHr=0
+totalWorkingDays=0
+
+
+function getWorkHours() {
+	case $1 in
+		$ISFULLTIME)
+			empHrs=8
+			;;
+		$ISPARTTIME)
+			empHrs=4
+			;;
+		*)
+			empHrs=0
+			;;
+	esac
+	echo $empHrs
+}
+
+
+function calculateDailyWage() {
+local empHrs=$1
+wage=$(($empHrs*$WAGE_PER_HR))
+echo $wage
+}
+
+
+while [[ $totalWorkingHr -lt $WORK_HR_IN_MONTH &&
+         $totalWorkingDays -lt $WORKINGDAYS ]]
+do
+	randomCheck=$((RANDOM%3))
+	((totalWorkingDays++))
+	empHrs=$( getWorkHours $randomCheck )
+	totalWorkingHr=$(($totalWorkingHr+$empHrs))
+
+
+	dailyWage[$totalWorkingDays]=$( calculateDailyWage $empHrs )
+done
+totalSalary=$( calculateDailyWage $totalWorkingHr )
+echo "Daily Wage is ${dailyWage[@]} "
+echo "All key ${!dailyWage[@]} "
